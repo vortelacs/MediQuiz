@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    password: 1234
+    url: jdbc:mysql://localhost:3306/mediquiz
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernates
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+  flyway:
+    url: jdbc:mysql://localhost:3306
+    user: root
+    password: 1234
+    schemas: mediquiz
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    enabled: true
+
+server:
+  error:
+    include-message: always
