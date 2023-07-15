@@ -9,6 +9,7 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQLDialect
     show-sql: true
+
   flyway:
     url: jdbc:mysql://localhost:3306
     user: root
@@ -17,6 +18,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     enabled: true
 
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:mEGNzra5oQRlvhTB@mediquiz.1bdifvh.mongodb.net/MediQuiz?retryWrites=true&w=majority&maxIdleTimeMS=60000
+
 server:
   error:
     include-message: always
+
+

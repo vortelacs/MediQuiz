@@ -18,6 +18,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -26,19 +29,24 @@ public class SecurityConfig{
 
     private final JwtAthFilter jwtAthFilter;
     private final UserService userService;
+    private CorsConfigurationSource corsConfigurationSource;
 
     @Lazy
-    public SecurityConfig(JwtAthFilter jwtAthFilter, UserService userService){
+    public SecurityConfig(JwtAthFilter jwtAthFilter, UserService userService, CorsConfigurationSource corsConfigurationSource){
         this.jwtAthFilter = jwtAthFilter;
-        this.userService = userService;
+        this.userService = userService;;
+        this.corsConfigurationSource = corsConfigurationSource;
 
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        http.csrf(AbstractHttpConfigurer::disable)
+        http.cors().configurationSource(corsConfigurationSource)
+                .and()
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**").permitAll()
+                        auth.requestMatchers("/admin/**").hasAnyAuthority("ROLE_ADMIN")
+                                .requestMatchers("/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
