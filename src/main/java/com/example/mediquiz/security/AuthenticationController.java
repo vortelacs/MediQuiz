@@ -4,14 +4,17 @@ import com.example.mediquiz.security.dto.AuthenticationRequest;
 import com.example.mediquiz.security.dto.SignUpRequest;
 import com.example.mediquiz.security.role.Role;
 import com.example.mediquiz.security.role.RoleRepository;
+import com.example.mediquiz.security.user.CustomUserDetails;
 import com.example.mediquiz.security.user.User;
 import com.example.mediquiz.security.user.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +24,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationManager authenticationManager;
@@ -30,29 +33,26 @@ public class AuthenticationController {
     private final RoleRepository roleRepository;
     private final UserService userService;
 
+
     @PostMapping("/login")
     @ResponseBody
-    public ResponseEntity<String> authenticate(
+    public ResponseEntity<?> authenticate(
             @RequestBody AuthenticationRequest request, HttpServletResponse response) {
 
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
         final UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
         if(userDetails != null){
             String token = jwtUtils.generateToken(userDetails);
-
-            // Create a new cookie
+            String userId = ((CustomUserDetails) authentication.getPrincipal()).getId();
             Cookie authCookie = new Cookie("token", token);
 
-            // Configure the cookie
             authCookie.setHttpOnly(true);
-            authCookie.setPath("/"); // Make it available to the entire application
-
-            // Add the cookie to the response
+            authCookie.setPath("/");
             response.addCookie(authCookie);
 
-            return ResponseEntity.ok("{\"token\" : \"" + token + "\"}");
+            return ResponseEntity.ok("{\"token\" : \"" + token + "\", \"userId\" : \"" + userId + "\"}");
         }
         return ResponseEntity.status(400).body("Could not generate token");
     }
