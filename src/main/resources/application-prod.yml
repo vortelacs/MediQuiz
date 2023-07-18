@@ -25,6 +25,3 @@ spring:
 server:
   error:
     include-message: always
-  address: 195.254.133.200
-
-
