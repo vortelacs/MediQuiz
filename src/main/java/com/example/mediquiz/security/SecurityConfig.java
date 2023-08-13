@@ -18,16 +18,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
-import java.util.Arrays;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -36,13 +30,11 @@ public class SecurityConfig{
 
     private final JwtAthFilter jwtAthFilter;
     private final UserService userService;
-    private final CorsConfigurationSource corsConfigurationSource;
 
     @Lazy
-    public SecurityConfig(JwtAthFilter jwtAthFilter, UserService userService, CorsConfigurationSource corsConfigurationSource){
+    public SecurityConfig(JwtAthFilter jwtAthFilter, UserService userService){
         this.jwtAthFilter = jwtAthFilter;
-        this.userService = userService;;
-        this.corsConfigurationSource = corsConfigurationSource;
+        this.userService = userService;
 
     }
     @Bean
@@ -90,7 +82,7 @@ public class SecurityConfig{
 
     @Bean
     public UserDetailsService userDetailsService(){
-        return username -> userService.loadUserByUsername(username);
+        return userService::loadUserByUsername;
     }
 
     @Bean
