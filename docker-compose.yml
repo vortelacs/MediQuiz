@@ -1,34 +1,30 @@
-version: '3.1'
-
+version: "3.8"
 services:
-
-  db:
-    image: mysql:8.0
+  api_service:
+    build: .
     restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - spring-mysql-net
     environment:
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: mediquiz
-      MYSQL_PASSWORD: 1234
-    ports:
-      - 3307:3307
-    volumes:
-      - db_data:/var/lib/mysql
-
-  web:
-    image: mediserver
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - 8080:8080
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/mediquiz?allowPublicKeyRetrieval=true
     depends_on:
-      - db
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3307/mediquiz
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 1234
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      - mysqldb
+    volumes:
+      - .m2:/root/.m2
 
-volumes:
-  db_data: {}
+  mysqldb:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - "3307:3306"
+    networks:
+      - spring-mysql-net
+    environment:
+      MYSQL_DATABASE: mediquiz
+      MYSQL_USER: jeka
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: 1234
+networks:
+  spring-mysql-net :
