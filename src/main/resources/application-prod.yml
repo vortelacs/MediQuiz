@@ -1,8 +1,8 @@
 spring:
   datasource:
     password: 1234
-    url: jdbc:mysql://localhost:3307/mediquiz?allowPublicKeyRetrieval=true
-    username: root
+    url: jdbc:mysql://mysqldb:3306/mediquiz?allowPublicKeyRetrieval=true
+    username: jeka
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -15,12 +15,12 @@ spring:
 
 
   flyway:
-    url: jdbc:mysql://mysqldb:3307
-    user: root
+    url: jdbc:mysql://localhost:3306/mediquiz?allowPublicKeyRetrieval=true
+    user: jeka
     password: 1234
     schemas: mediquiz
     driver-class-name: com.mysql.cj.jdbc.Driver
-    enabled: false
+    enabled: true
 
   data:
     mongodb:

@@ -26,5 +26,6 @@ services:
       MYSQL_USER: jeka
       MYSQL_PASSWORD: 1234
       MYSQL_ROOT_PASSWORD: 1234
+
 networks:
-  spring-mysql-net :
+  spring-mysql-net:
