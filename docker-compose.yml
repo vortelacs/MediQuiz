@@ -1,8 +1,8 @@
-version: '3.1'
+version: '3.8'
 
 services:
 
-  db:
+  mysqldb:
     image: mysql:8.0
     restart: always
     environment:
@@ -10,8 +10,6 @@ services:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: mediquiz
       MYSQL_PASSWORD: 1234
-    ports:
-      - 3307:3307
     volumes:
       - db_data:/var/lib/mysql
 
@@ -21,11 +19,11 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
-      - db
+      - mysqldb
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3307/mediquiz
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/mediquiz
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
