@@ -2,16 +2,16 @@ version: '3.8'
 
 services:
 
-  mysqldb:
-    image: mysql:8.0
-    restart: always
-    environment:
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: mediquiz
-      MYSQL_PASSWORD: 1234
-    volumes:
-      - db_data:/var/lib/mysql
+#  mysqldb:
+#    image: mysql:8.0
+#    restart: always
+#    environment:
+#      MYSQL_ROOT_USER: root
+#      MYSQL_ROOT_PASSWORD: 1234
+#      MYSQL_DATABASE: mediquiz
+#      MYSQL_PASSWORD: 1234
+#    volumes:
+#      - db_data:/var/lib/mysql
 
   web:
     image: mediserver
@@ -20,10 +20,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      - mysqldb
+#    depends_on:
+#      - mysqldb
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/mediquiz
+      SPRING_DATASOURCE_URL: jdbc:mysql://5.tcp.eu.ngrok.io:19457/mediquiz
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
