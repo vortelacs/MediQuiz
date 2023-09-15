@@ -1,7 +1,7 @@
 spring:
   datasource:
     password: 1234
-    url: jdbc:mysql://mysqldb:3306/mediquiz
+    url: jdbc:mysql://5.tcp.eu.ngrok.io:19457/mediquiz
     username: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -15,7 +15,7 @@ spring:
 
 
   flyway:
-    url: jdbc:mysql://mysqldb:3306/mediquiz
+    url: jdbc:mysql://5.tcp.eu.ngrok.io:19457/mediquiz
     user: root
     password: 1234
     schemas: mediquiz
