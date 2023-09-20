@@ -1,8 +1,38 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: password
-    driver-class-name: org.h2.Driver
+    password: 1234
+    url: jdbc:mysql://localhost:3306/mediquiz
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+  sql:
+    init:
+      mode: always
+
+  flyway:
+    url: jdbc:mysql://localhost:3306/mediquiz
+    user: root
+    password: 1234
+    schemas: mediquiz
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    enabled: true
+
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:mEGNzra5oQRlvhTB@mediquiz.1bdifvh.mongodb.net/MediQuiz?retryWrites=true&w=majority&maxIdleTimeMS=60000
+
+server:
+  ssl:
+    key-store: classpath:keystore/springboot.p12
+    key-store-password: password
+    key-store-type: pkcs12
+    key-alias: springboot
+    key-password: password
+    enabled: true
+  port: 8443
+  error:
+    include-message: always

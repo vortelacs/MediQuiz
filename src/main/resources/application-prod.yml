@@ -28,11 +28,12 @@ spring:
 
 server:
   ssl:
-    key-store: classpath:keystore.p12
+    key-store: classpath:keystore/springboot.p12
     key-store-password: password
     key-store-type: pkcs12
     key-alias: springboot
     key-password: password
+    enabled: true
   port: 8443
   error:
     include-message: always
