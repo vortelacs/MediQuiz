@@ -1,11 +1,13 @@
 package com.example.mediquiz.app.quiz;
 
 
+import com.example.mediquiz.app.model.Difficulty;
 import com.example.mediquiz.app.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +22,23 @@ public class QuestionService {
         this.mongoTemplate = mongoTemplate;
     }
 
-    public List<Question> getQuickQuiz() {
+    public List<Question> getQuickQuiz(int size) {
         Aggregation agg = Aggregation.newAggregation(
-                Aggregation.sample(15)
+                Aggregation.sample(size)
         );
 
-        AggregationResults<Question> results = mongoTemplate.aggregate(agg, "questions", Question.class);
-        List<Question> randomQuestions = results.getMappedResults();
 
-        return randomQuestions;
+        return mongoTemplate.aggregate(agg, "questions", Question.class).getMappedResults();
     }
+
+    public List<Question> getCustomQuiz(int size, Difficulty difficulty, String category){
+        Aggregation agg = Aggregation
+                    .newAggregation(Aggregation.match(Criteria.where("difficulty").is(difficulty)),
+                            Aggregation.match(Criteria.where("category").is(category) ),
+                Aggregation.sample(size)
+        );
+
+        return mongoTemplate.aggregate(agg, "questions", Question.class).getMappedResults();
+    }
+
 }
